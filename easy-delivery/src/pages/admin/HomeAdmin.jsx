@@ -24,16 +24,24 @@ export default function HomeAdmin() {
 
           <ul className="navbar-items">
             <li>
-              <a href="#">Home</a>
+              <button onClick={() => navigate("/")} className="link-btn">
+                Home
+              </button>
             </li>
             <li>
-              <a href="#">Adicionar Categoria</a>
+              <button onClick={() => navigate("/categoria")} className="link-btn">
+                Adicionar Categoria
+              </button>
             </li>
             <li>
-              <a href="#">Criar Prato</a>
+              <button onClick={() => navigate("/prato")} className="link-btn">
+                Criar Prato
+              </button>
             </li>
             <li>
-              <a href="#">Listar Categorias</a>
+              <button onClick={() => navigate("/categoria")} className="link-btn">
+                Listar Categorias
+              </button>
             </li>
             <li>
               <button className="default-btn" onClick={handleLogout}>Sair</button>
