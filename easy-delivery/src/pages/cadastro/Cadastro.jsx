@@ -46,6 +46,7 @@ export default function Cadastro() {
               <h1>CADASTRE-SE</h1>
 
               <InputField
+                className="cadastro"
                 label="Nome"
                 type="text"
                 placeholder="Nome completo"
@@ -55,6 +56,7 @@ export default function Cadastro() {
               />
 
               <InputField
+                className="cadastro"
                 label="CPF"
                 type="text"
                 placeholder="000.000.000-00"
@@ -64,6 +66,7 @@ export default function Cadastro() {
               />
 
               <InputField
+                className="cadastro"
                 label="E-mail"
                 type="email"
                 placeholder="E-mail"
@@ -73,6 +76,7 @@ export default function Cadastro() {
               />
 
               <InputField
+                className="cadastro"
                 label="Senha"
                 type="password"
                 placeholder="Senha"
@@ -81,7 +85,7 @@ export default function Cadastro() {
                 onChange={handleChange}
               />
 
-              <Button text="Cadastre-se" onClick={handleSubmit} />
+              <Button text="Cadastre-se" className="btn-cadastro" onClick={handleSubmit} />
 
               <p className="login-link">
                 Já tem uma conta?

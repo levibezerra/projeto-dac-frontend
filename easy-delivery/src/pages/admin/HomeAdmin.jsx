@@ -9,8 +9,15 @@ export default function HomeAdmin() {
   const navigate = useNavigate();
 
   function handleLogout() {
-    navigate("/");
+    navigate("/admin");
   }
+
+  function goToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
 
   return (
     <div className="container">
@@ -24,7 +31,7 @@ export default function HomeAdmin() {
 
           <ul className="navbar-items">
             <li>
-              <button onClick={() => navigate("/")} className="link-btn">
+              <button onClick={goToTop} className="link-btn">
                 Home
               </button>
             </li>
@@ -39,12 +46,14 @@ export default function HomeAdmin() {
               </button>
             </li>
             <li>
-              <button onClick={() => navigate("/categoria")} className="link-btn">
+              <button onClick={() => navigate("")} className="link-btn">
                 Listar Categorias
               </button>
             </li>
             <li>
-              <button className="default-btn" onClick={handleLogout}>Sair</button>
+              <button onClick={() => navigate("/")} className="default-btn" >
+                Sair
+              </button>
             </li>
           </ul>
         </nav>

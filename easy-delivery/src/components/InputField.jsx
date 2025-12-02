@@ -1,6 +1,6 @@
-export default function InputField({ label, type, name, value, onChange, placeholder }) {
+export default function InputField({ label, type, name, value, onChange, placeholder, className }) {
   return (
-    <div className="textfield">
+    <div className={`textfield ${className}`}>
       <label>{label}</label>
       <input
         type={type}

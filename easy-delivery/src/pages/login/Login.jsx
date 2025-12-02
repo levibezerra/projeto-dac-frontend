@@ -28,19 +28,19 @@ export default function Login() {
             <div className="card-login">
               <h1>LOGIN</h1>
 
-              <div className="textfield">
+              <div className="textfield-login">
                 <label htmlFor="email">E-mail</label>
                 <input type="text" name="email" placeholder="E-mail" />
               </div>
 
-              <div className="textfield">
+              <div className="textfield-login">
                 <label htmlFor="senha">Senha</label>
                 <input type="password" name="senha" placeholder="Senha" />
               </div>
 
               <button className="btn-login" onClick={handleLogin}>Login</button>
 
-              <p className="voltar-link">
+              <p className="voltar-link-login">
                 <Link to="/">Voltar</Link>
               </p>
             </div>
