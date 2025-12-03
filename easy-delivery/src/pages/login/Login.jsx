@@ -16,7 +16,7 @@ export default function Login() {
         <div className="main-login">
 
           <div className="left-login">
-            <h1>Faça login</h1>
+            <h1>Faça Login</h1>
             <img
               src={imgLogin}
               className="left-login-image"

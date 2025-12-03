@@ -33,7 +33,7 @@ export default function Cadastro() {
         <div className="main-cadastro">
 
           <div className="left-cadastro">
-            <h1>Realize seu cadastro</h1>
+            <h1>Realize seu Cadastro</h1>
             <img
               src={imgCadastro}
               className="left-cadastro-image"

@@ -36,12 +36,12 @@ export default function HomeAdmin() {
               </button>
             </li>
             <li>
-              <button onClick={() => navigate("/categoria")} className="link-btn">
+              <button onClick={() => navigate("/categorias")} className="link-btn">
                 Adicionar Categoria
               </button>
             </li>
             <li>
-              <button onClick={() => navigate("/prato")} className="link-btn">
+              <button onClick={() => navigate("/pratos")} className="link-btn">
                 Criar Prato
               </button>
             </li>
@@ -79,7 +79,7 @@ export default function HomeAdmin() {
               <p><b>STATUS: </b>DISPONÍVEL</p>
               <p><b>PREÇO: </b>25.90</p>
               <div className="acoes-card">
-                <button className="btn-icon">
+                <button onClick={() => navigate("/editar-pratos")} className="btn-icon">
                   <img src={iconEditar} alt="Editar" />
                 </button>
                 <button className="btn-icon deletar">
