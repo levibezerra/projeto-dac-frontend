@@ -46,7 +46,7 @@ export default function HomeAdmin() {
               </button>
             </li>
             <li>
-              <button onClick={() => navigate("")} className="link-btn">
+              <button onClick={() => navigate("/listar-categoria")} className="link-btn">
                 Listar Categorias
               </button>
             </li>

@@ -6,6 +6,8 @@ import Categoria from "../pages/admin/Categoria";
 import Prato from "../pages/admin/Prato";
 import EditarPrato from "../pages/admin/EditarPrato";
 import HomeUser from "../pages/user/HomeUser";
+import ListarCategoria from "../pages/admin/ListarCategoria";
+import EditarCategoria from "../pages/admin/EditarCategoria";
 
 export default function AppRoutes() {
   return (
@@ -18,6 +20,8 @@ export default function AppRoutes() {
         <Route path="/pratos" element={<Prato />} />
         <Route path="/editar-pratos" element={<EditarPrato />} />
         <Route path="/user" element={<HomeUser />} />
+        <Route path="/listar-categoria" element={<ListarCategoria />} />
+        <Route path="/editar-categoria" element={<EditarCategoria />} />
       </Routes>
     </BrowserRouter>
   );
