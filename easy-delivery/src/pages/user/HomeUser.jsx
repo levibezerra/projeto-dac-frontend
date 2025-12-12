@@ -1,8 +1,7 @@
 import "./user.css";
 import { useNavigate } from "react-router-dom";
 import logo from "../../images/img/logo.png";
-import iconEditar from "../../images/icons/editar.png";
-import iconDeletar from "../../images/icons/deletar.png";
+import selecionar from "../../images/icons/selecionar.png"
 
 export default function HomeUser() {
 
@@ -69,11 +68,8 @@ export default function HomeUser() {
               <p><b>STATUS: </b>DISPONÍVEL</p>
               <p><b>PREÇO: </b>25.90</p>
               <div className="acoes-card">
-                <button onClick={() => navigate("/editar-pratos")} className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
+                <button onClick={() => navigate("/pedido")} className="btn-icon">
+                  <img src={selecionar} alt="Selecionar prato para compra" />
                 </button>
               </div>
             </div>
@@ -86,11 +82,8 @@ export default function HomeUser() {
               <p><b>STATUS: </b>DISPONÍVEL</p>
               <p><b>PREÇO: </b>25.90</p>
               <div className="acoes-card">
-                <button className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
+                <button onClick={() => navigate("/pedido")} className="btn-icon">
+                  <img src={selecionar} alt="Selecionar prato para compra" />
                 </button>
               </div>
             </div>
@@ -103,31 +96,12 @@ export default function HomeUser() {
               <p><b>STATUS: </b>DISPONÍVEL</p>
               <p><b>PREÇO: </b>25.90</p>
               <div className="acoes-card">
-                <button className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
+                <button onClick={() => navigate("/pedido")} className="btn-icon">
+                  <img src={selecionar} alt="Selecionar prato para compra" />
                 </button>
               </div>
             </div>
-
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
-              <div className="acoes-card">
-                <button className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
-                </button>
-              </div>
-            </div>
+            
           </div>
         </section>
       </main>

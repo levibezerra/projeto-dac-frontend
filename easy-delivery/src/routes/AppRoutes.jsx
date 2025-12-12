@@ -8,6 +8,7 @@ import EditarPrato from "../pages/admin/EditarPrato";
 import HomeUser from "../pages/user/HomeUser";
 import ListarCategoria from "../pages/admin/ListarCategoria";
 import EditarCategoria from "../pages/admin/EditarCategoria";
+import Pedido from "../pages/user/Pedido";
 
 export default function AppRoutes() {
   return (
@@ -22,6 +23,7 @@ export default function AppRoutes() {
         <Route path="/user" element={<HomeUser />} />
         <Route path="/listar-categoria" element={<ListarCategoria />} />
         <Route path="/editar-categoria" element={<EditarCategoria />} />
+        <Route path="/pedido" element={<Pedido />} />
       </Routes>
     </BrowserRouter>
   );
