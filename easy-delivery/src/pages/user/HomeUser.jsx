@@ -1,15 +1,15 @@
-import "./admin.css";
+import "./user.css";
 import { useNavigate } from "react-router-dom";
 import logo from "../../images/img/logo.png";
 import iconEditar from "../../images/icons/editar.png";
 import iconDeletar from "../../images/icons/deletar.png";
 
-export default function HomeAdmin() {
+export default function HomeUser() {
 
   const navigate = useNavigate();
 
   function handleLogout() {
-    navigate("/admin");
+    navigate("/user");
   }
 
   function goToTop() {
@@ -20,43 +20,28 @@ export default function HomeAdmin() {
 }
 
   return (
-    <div className="container">
+    <div className="container-user">
 
       {/* NAVBAR */}
-      <div className="navbar-container">
+      <div className="navbar-container-user">
         <nav>
           <a href="#">
             <img src={logo} alt="Easy Delivery" className="logo" />
           </a>
 
-          <ul className="navbar-items">
+          <ul className="navbar-itens-user">
             <li>
-              <button onClick={goToTop} className="link-btn">
+              <button onClick={goToTop} className="link-btn-user">
                 Home
               </button>
             </li>
             <li>
-              <button onClick={() => navigate("/categorias")} className="link-btn">
-                Adicionar Categoria
+              <button onClick={() => navigate("")} className="link-btn-user">
+                Visualizar Pedidos
               </button>
             </li>
             <li>
-              <button onClick={() => navigate("/pratos")} className="link-btn">
-                Criar Prato
-              </button>
-            </li>
-            <li>
-              <button onClick={() => navigate("")} className="link-btn">
-                Listar Categorias
-              </button>
-            </li>
-            <li>
-              <button onClick={() => navigate("/user")} className="link-btn">
-                User
-              </button>
-            </li>
-            <li>
-              <button onClick={() => navigate("/")} className="default-btn" >
+              <button onClick={() => navigate("/")} className="default-btn-user" >
                 Sair
               </button>
             </li>
@@ -65,8 +50,8 @@ export default function HomeAdmin() {
       </div>
 
       {/* BANNER */}
-      <main className="main-admin">
-        <div className="div-banner">
+      <main className="main-user">
+        <div className="div-banner-user">
           <h1>Easy Delivery</h1>
           <p>Faça seu melhor pedido aqui!</p>
         </div>
@@ -85,40 +70,6 @@ export default function HomeAdmin() {
               <p><b>PREÇO: </b>25.90</p>
               <div className="acoes-card">
                 <button onClick={() => navigate("/editar-pratos")} className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
-                </button>
-              </div>
-            </div>
-
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
-              <div className="acoes-card">
-                <button className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
-                </button>
-              </div>
-            </div>
-
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
-              <div className="acoes-card">
-                <button className="btn-icon">
                   <img src={iconEditar} alt="Editar" />
                 </button>
                 <button className="btn-icon deletar">

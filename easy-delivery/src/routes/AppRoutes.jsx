@@ -5,6 +5,7 @@ import HomeAdmin from "../pages/admin/HomeAdmin";
 import Categoria from "../pages/admin/Categoria";
 import Prato from "../pages/admin/Prato";
 import EditarPrato from "../pages/admin/EditarPrato";
+import HomeUser from "../pages/user/HomeUser";
 
 export default function AppRoutes() {
   return (
@@ -16,6 +17,7 @@ export default function AppRoutes() {
         <Route path="/categorias" element={<Categoria />} />
         <Route path="/pratos" element={<Prato />} />
         <Route path="/editar-pratos" element={<EditarPrato />} />
+        <Route path="/user" element={<HomeUser />} />
       </Routes>
     </BrowserRouter>
   );
