@@ -1,14 +1,14 @@
-import "./user.css";
+import "./pedidoUser.css";
 import { useNavigate } from "react-router-dom";
 import logo from "../../images/img/logo.png";
 import selecionar from "../../images/icons/selecionar.png"
 
-export default function HomeUser() {
+export default function PedidoUser() {
 
   const navigate = useNavigate();
 
   function handleLogout() {
-    navigate("/user");
+    navigate("/pedidoUser");
   }
 
   function goToTop() {
@@ -19,29 +19,24 @@ export default function HomeUser() {
 }
 
   return (
-    <div className="container-user">
+    <div className="container-pedido-user">
 
       {/* NAVBAR */}
-      <div className="navbar-container-user">
+      <div className="navbar-container-pedido-user">
         <nav>
           <a href="#">
             <img src={logo} alt="Easy Delivery" className="logo" />
           </a>
 
-          <ul className="navbar-itens-user">
+          <ul className="navbar-itens-pedido-user">
             <li>
-              <button onClick={goToTop} className="link-btn-user">
+              <button onClick={goToTop} className="link-btn-pedido-user">
                 Home
               </button>
             </li>
             <li>
-              <button onClick={() => navigate("/meus-pedidos")} className="link-btn-user">
-                Meus Pedidos
-              </button>
-            </li>
-            <li>
-              <button onClick={() => navigate("/")} className="default-btn-user" >
-                Sair
+              <button onClick={() => navigate("/user")} className="link-btn-pedido-user">
+                Voltar
               </button>
             </li>
           </ul>
@@ -49,15 +44,15 @@ export default function HomeUser() {
       </div>
 
       {/* BANNER */}
-      <main className="main-user">
-        <div className="div-banner-user">
+      <main className="main-pedido-user">
+        <div className="div-banner-pedido-user">
           <h1>Easy Delivery</h1>
           <p>Faça seu melhor pedido aqui!</p>
         </div>
 
         {/* PRATOS */}
         <section className="container-pratos">
-          <h1>Cardápio</h1>
+          <h1>Meus Pedidos</h1>
 
           <div className="lista-pratos">
             <div className="card">
@@ -65,11 +60,13 @@ export default function HomeUser() {
               <h2>Hambúrguer Clássico</h2>
               <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
               <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
+              <p><b>ENDEREÇO: </b>Rua Teste - 10</p>
+              <p><b>STATUS: </b>EM PREPARAÇÃO</p>
+              <p><b>QUANTIDADE: </b>2</p>
+              <p><b>TOTAL: </b>51.80</p>
               <div className="acoes-card">
-                <button onClick={() => navigate("/pedido")} className="btn-icon">
-                  <img src={selecionar} alt="Selecionar prato para compra" />
+                <button onClick={() => navigate("/pagamento")} className="btn-icon">
+                  <img src={selecionar} alt="Realizar pagamento" />
                 </button>
               </div>
             </div>
@@ -79,11 +76,13 @@ export default function HomeUser() {
               <h2>Hambúrguer Clássico</h2>
               <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
               <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
+              <p><b>ENDEREÇO: </b>Rua Teste - 10</p>
+              <p><b>STATUS: </b>EM PREPARAÇÃO</p>
+              <p><b>QUANTIDADE: </b>2</p>
+              <p><b>TOTAL: </b>51.80</p>
               <div className="acoes-card">
-                <button onClick={() => navigate("/pedido")} className="btn-icon">
-                  <img src={selecionar} alt="Selecionar prato para compra" />
+                <button onClick={() => navigate("/pagamento")} className="btn-icon">
+                  <img src={selecionar} alt="Realizar pagamento" />
                 </button>
               </div>
             </div>
@@ -93,15 +92,17 @@ export default function HomeUser() {
               <h2>Hambúrguer Clássico</h2>
               <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
               <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
+              <p><b>ENDEREÇO: </b>Rua Teste - 10</p>
+              <p><b>STATUS: </b>EM PREPARAÇÃO</p>
+              <p><b>QUANTIDADE: </b>2</p>
+              <p><b>TOTAL: </b>51.80</p>
               <div className="acoes-card">
-                <button onClick={() => navigate("/pedido")} className="btn-icon">
-                  <img src={selecionar} alt="Selecionar prato para compra" />
+                <button onClick={() => navigate("/pagamento")} className="btn-icon">
+                  <img src={selecionar} alt="Realizar pagamento" />
                 </button>
               </div>
             </div>
-            
+    
           </div>
         </section>
       </main>

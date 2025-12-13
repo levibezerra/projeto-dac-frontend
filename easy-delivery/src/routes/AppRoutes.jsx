@@ -9,6 +9,8 @@ import HomeUser from "../pages/user/HomeUser";
 import ListarCategoria from "../pages/admin/ListarCategoria";
 import EditarCategoria from "../pages/admin/EditarCategoria";
 import Pedido from "../pages/user/Pedido";
+import PedidoUser from "../pages/user/PedidoUser";
+import Pagamento from "../pages/user/Pagamento";
 
 export default function AppRoutes() {
   return (
@@ -24,6 +26,8 @@ export default function AppRoutes() {
         <Route path="/listar-categoria" element={<ListarCategoria />} />
         <Route path="/editar-categoria" element={<EditarCategoria />} />
         <Route path="/pedido" element={<Pedido />} />
+        <Route path="/meus-pedidos" element={<PedidoUser />} />
+        <Route path="/pagamento" element={<Pagamento />} />
       </Routes>
     </BrowserRouter>
   );
