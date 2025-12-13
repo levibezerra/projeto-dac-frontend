@@ -11,6 +11,7 @@ import EditarCategoria from "../pages/admin/EditarCategoria";
 import Pedido from "../pages/user/Pedido";
 import PedidoUser from "../pages/user/PedidoUser";
 import Pagamento from "../pages/user/Pagamento";
+import PedidoAdmin from "../pages/admin/PedidoAdmin";
 
 export default function AppRoutes() {
   return (
@@ -28,6 +29,7 @@ export default function AppRoutes() {
         <Route path="/pedido" element={<Pedido />} />
         <Route path="/meus-pedidos" element={<PedidoUser />} />
         <Route path="/pagamento" element={<Pagamento />} />
+        <Route path="/pedidos-admin" element={<PedidoAdmin />} />
       </Routes>
     </BrowserRouter>
   );

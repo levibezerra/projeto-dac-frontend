@@ -51,6 +51,11 @@ export default function HomeAdmin() {
               </button>
             </li>
             <li>
+              <button onClick={() => navigate("/pedidos-admin")} className="link-btn">
+                Pedidos
+              </button>
+            </li>
+            <li>
               <button onClick={() => navigate("/user")} className="link-btn">
                 User
               </button>
