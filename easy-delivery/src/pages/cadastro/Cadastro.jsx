@@ -3,8 +3,14 @@ import InputField from "../../components/InputField";
 import Button from "../../components/Button";
 import { useState } from "react";
 import imgCadastro from "../../images/img/img-cadastro.svg";
+import api from "../../services/easyApi";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function Cadastro() {
+
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     nome: "",
     cpf: "",
@@ -18,12 +24,52 @@ export default function Cadastro() {
 
   async function handleSubmit() {
     try {
-      const response = await api.post("/usuarios", form);
+      await api.post("/usuarios", {
+        email: form.email,
+        senha: form.senha
+      });
 
-      alert("Cadastro realizado com sucesso!");
-      console.log(response.data);
+      const authResponse = await api.post("/auth", {
+        email: form.email,
+        senha: form.senha
+      });
+
+      const token = authResponse.data.token;
+
+      await api.post(
+        "/clientes",
+        {
+          nome: form.nome,
+          cpf: form.cpf
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      toast.success("Cadastro realizado com sucesso!");
+
+      setForm({
+        nome: "",
+        cpf: "",
+        email: "",
+        senha: ""
+      });
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+
     } catch (error) {
-      alert("Erro no cadastro!");
+      console.error(error);
+
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Erro ao realizar o cadastro!");
+      }
     }
   }
 
@@ -93,7 +139,6 @@ export default function Cadastro() {
               </p>
             </div>
           </div>
-
         </div>
       </section>
     </main>
