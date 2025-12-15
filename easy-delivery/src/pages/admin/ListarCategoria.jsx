@@ -1,24 +1,42 @@
 import "./listarCategoria.css";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import logo from "../../images/img/logo.png";
 import listarCategoria from "../../images/img/img-listar-categoria.jpg";
 import iconEditar from "../../images/icons/editar.png";
 import iconDeletar from "../../images/icons/deletar.png";
+import api from "../../services/easyApi";
+import { toast } from "react-toastify";
 
 export default function ListarCategoria() {
 
   const navigate = useNavigate();
-
-  function handleLogout() {
-    navigate("/admin");
-  }
+  const [categorias, setCategorias] = useState([]);
 
   function goToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  async function carregarCategorias() {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await api.get("/categorias", {
+        headers: {
+          Authorization: token
+        }
+      });
+
+      setCategorias(response.data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao carregar categorias");
+    }
+  }
+
+  useEffect(() => {
+    carregarCategorias();
+  }, []);
 
   return (
     <div className="container-listar-categorias">
@@ -45,59 +63,53 @@ export default function ListarCategoria() {
         </nav>
       </div>
 
-      {/* BANNER */}
       <main className="main-admin-listar-categorias">
         <div className="div-banner-listar-categorias">
           <h1>Easy Delivery</h1>
           <p>Faça seu melhor pedido aqui!</p>
         </div>
 
-        {/* PRATOS */}
+        {/* LISTAGEM */}
         <section className="container-listar-categorias">
           <h1>Categorias</h1>
 
           <div className="listar-categorias">
-            <div className="card-listar-categorias">
-              <img src={listarCategoria} alt="Imagem da categoria"/>
-              <h2>Lanches</h2>
-              <p><b>DESCRIÇÃO: </b>Pratos rápidos como sanduíches, hambúrgueres e salgados</p>
-              <div className="acoes-card-listar-categorias">
-                <button onClick={() => navigate("/editar-categoria")} className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
-                </button>
-              </div>
-            </div>
 
-            <div className="card-listar-categorias">
-              <img src={listarCategoria} alt="Imagem da categoria"/>
-              <h2>Carnes</h2>
-              <p><b>DESCRIÇÃO: </b>Pratos que têm carne bovina, suína ou de cordeiro</p>
-              <div className="acoes-card-listar-categorias">
-                <button onClick={() => navigate("/editar-pratos")} className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
-                </button>
-              </div>
-            </div>
+            {categorias.length === 0 && (
+              <p>Nenhuma categoria cadastrada.</p>
+            )}
 
-            <div className="card-listar-categorias">
-              <img src={listarCategoria} alt="Imagem da categoria"/>
-              <h2>Aves</h2>
-              <p><b>DESCRIÇÃO: </b>Pratos preparados com frango, peru ou outras aves</p>
-              <div className="acoes-card-listar-categorias">
-                <button onClick={() => navigate("/editar-pratos")} className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
-                </button>
+            {categorias.map((categoria) => (
+              <div className="card-listar-categorias" key={categoria.id}>
+                <img
+                  src={listarCategoria}
+                  alt="Imagem da categoria"
+                />
+
+                <h2>{categoria.nome}</h2>
+
+                <p>
+                  <b>DESCRIÇÃO: </b>{categoria.descricao}
+                </p>
+
+                <div className="acoes-card-listar-categorias">
+                  <button
+                    onClick={() => navigate(`/editar-categoria/${categoria.id}`)}
+                    className="btn-icon"
+                  >
+                    <img src={iconEditar} alt="Editar" />
+                  </button>
+
+                  <button
+                    className="btn-icon deletar"
+                    onClick={() => toast.info("Implementar exclusão")}
+                  >
+                    <img src={iconDeletar} alt="Deletar" />
+                  </button>
+                </div>
               </div>
-            </div>
+            ))}
+
           </div>
         </section>
       </main>

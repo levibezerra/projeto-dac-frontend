@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import InputField from "../../components/InputField";
 import Button from "../../components/Button";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import api from "../../services/easyApi";
 
 export default function Categoria() {
 
@@ -19,16 +21,51 @@ export default function Categoria() {
   }
 
   async function handleSubmit() {
-    try {
-      const response = await api.post("/categorias", form);
 
-      alert("Categoria criada com sucesso!");
-      console.log(response.data);
+    if (!form.nome || !form.descricao) {
+      toast.warn("Preencha todos os campos!");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Usuário não autenticado!");
+        navigate("/login");
+        return;
+      }
+
+      await api.post(
+        "/categorias",
+        {
+          nome: form.nome,
+          descricao: form.descricao
+        },
+        {
+          headers: {
+            Authorization: token
+          }
+        }
+      );
+
+      toast.success("Categoria criada com sucesso!");
+
+      setForm({
+        nome: "",
+        descricao: ""
+      });
 
       navigate("/admin");
+
     } catch (error) {
-      console.log(error);
-      alert("Erro ao criar categoria!");
+      console.error(error);
+
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Erro ao criar categoria!");
+      }
     }
   }
 
