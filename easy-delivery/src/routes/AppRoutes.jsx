@@ -25,7 +25,7 @@ export default function AppRoutes() {
         <Route path="/editar-pratos" element={<EditarPrato />} />
         <Route path="/user" element={<HomeUser />} />
         <Route path="/listar-categoria" element={<ListarCategoria />} />
-        <Route path="/editar-categoria" element={<EditarCategoria />} />
+        <Route path="/editar-categoria/:id" element={<EditarCategoria />} />
         <Route path="/pedido" element={<Pedido />} />
         <Route path="/meus-pedidos" element={<PedidoUser />} />
         <Route path="/pagamento" element={<Pagamento />} />

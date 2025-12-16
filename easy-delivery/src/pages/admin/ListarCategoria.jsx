@@ -34,6 +34,34 @@ export default function ListarCategoria() {
     }
   }
 
+  async function handleDelete(id) {
+    const confirmacao = window.confirm(
+      "Tem certeza que deseja excluir esta categoria?"
+    );
+
+    if (!confirmacao) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await api.delete(`/categorias/${id}`, {
+        headers: {
+          Authorization: token
+        }
+      });
+
+      toast.success("Categoria excluída com sucesso!");
+
+      setCategorias((prev) =>
+        prev.filter((categoria) => categoria.id !== id)
+      );
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao excluir categoria");
+    }
+  }
+
   useEffect(() => {
     carregarCategorias();
   }, []);
@@ -102,7 +130,7 @@ export default function ListarCategoria() {
 
                   <button
                     className="btn-icon deletar"
-                    onClick={() => toast.info("Implementar exclusão")}
+                    onClick={() => handleDelete(categoria.id)}
                   >
                     <img src={iconDeletar} alt="Deletar" />
                   </button>

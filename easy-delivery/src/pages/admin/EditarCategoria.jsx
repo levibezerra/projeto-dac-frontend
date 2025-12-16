@@ -1,34 +1,70 @@
 import "./editarCategoria.css";
 import imgCategoria from "../../images/img/img-categoria.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import InputField from "../../components/InputField";
 import Button from "../../components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../../services/easyApi";
+import { toast } from "react-toastify";
 
 export default function EditarCategoria() {
 
   const navigate = useNavigate();
+
+  const { id } = useParams();
 
   const [form, setForm] = useState({
     nome: "",
     descricao: ""
   });
 
+  useEffect(() => {
+    async function buscarCategoria() {
+      try {
+        const response = await api.get(`/categorias/${id}`, {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        });
+
+        setForm({
+          nome: response.data.nome,
+          descricao: response.data.descricao,
+        });
+
+      } catch (error) {
+        console.error(error);
+        toast.error("Erro ao carregar a categoria");
+        navigate("/listar-categoria");
+      }
+    }
+
+    buscarCategoria();
+  }, [id, navigate]);
+
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
   async function handleSubmit() {
+    if (!form.nome || !form.descricao) {
+      toast.warn("Preencha todos os campos!");
+      return;
+    }
+
     try {
-      const response = await api.post("/categorias", form);
+      await api.patch(`/categorias/${id}`, form, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
 
-      alert("Categoria editada com sucesso!");
-      console.log(response.data);
+      toast.success("Categoria atualizada com sucesso!");
+      navigate("/listar-categoria");
 
-      navigate("/admin");
     } catch (error) {
-      console.log(error);
-      alert("Erro ao editar uma categoria!");
+      console.error(error);
+      toast.error("Erro ao editar a categoria!");
     }
   }
 
