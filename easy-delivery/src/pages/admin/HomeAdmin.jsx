@@ -1,23 +1,62 @@
 import "./admin.css";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import logo from "../../images/img/logo.png";
 import iconEditar from "../../images/icons/editar.png";
 import iconDeletar from "../../images/icons/deletar.png";
+import api from "../../services/easyApi";
+import { toast } from "react-toastify";
+
 
 export default function HomeAdmin() {
 
   const navigate = useNavigate();
-
-  function handleLogout() {
-    navigate("/admin");
-  }
+  const [pratos, setPratos] = useState([]);
 
   function goToTop() {
-  window.scrollTo({
+    window.scrollTo({
     top: 0,
     behavior: "smooth"
-  });
-}
+    });
+  }
+
+  async function carregarPratos() {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await api.get("/pratos", {
+        headers: {
+          Authorization: token
+        }
+      });
+
+      setPratos(response.data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao carregar pratos");
+    }
+  }
+
+  async function deletarPrato(id) {
+    try {
+      const token = localStorage.getItem("token");
+
+      await api.delete(`/pratos/${id}`, {
+        headers: { Authorization: token }
+      });
+
+      toast.success("Prato excluído com sucesso!");
+      carregarPratos();
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao excluir prato");
+    }
+  }
+
+  useEffect(() => {
+    carregarPratos();
+  }, []);
 
   return (
     <div className="container">
@@ -56,11 +95,6 @@ export default function HomeAdmin() {
               </button>
             </li>
             <li>
-              <button onClick={() => navigate("/user")} className="link-btn">
-                User
-              </button>
-            </li>
-            <li>
               <button onClick={() => navigate("/")} className="default-btn" >
                 Sair
               </button>
@@ -81,110 +115,46 @@ export default function HomeAdmin() {
           <h1>Cardápio</h1>
 
           <div className="lista-pratos">
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
-              <div className="acoes-card">
-                <button onClick={() => navigate("/editar-pratos")} className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
-                </button>
-              </div>
-            </div>
 
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
-              <div className="acoes-card">
-                <button className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
-                </button>
-              </div>
-            </div>
+            {pratos.length === 0 && (
+              <p>Nenhum prato cadastrado.</p>
+            )}
 
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
-              <div className="acoes-card">
-                <button className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
-                </button>
-              </div>
-            </div>
+            {pratos.map((prato) => (
+              <div className="card" key={prato.id}>
+                <img
+                  src={prato.imagemUrl}
+                  alt={prato.nome}
+                />
 
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
-              <div className="acoes-card">
-                <button className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
-                </button>
-              </div>
-            </div>
+                <h2>{prato.nome}</h2>
+                <p><b>DESCRIÇÃO:</b> {prato.descricao}</p>
+                <p><b>CATEGORIA:</b> {prato.categoriaNome}</p>
+                <p><b>STATUS:</b> {prato.statusDoPrato}</p>
+                <p><b>PREÇO:</b> R$ {Number(prato.preco).toFixed(2)}</p>
 
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
-              <div className="acoes-card">
-                <button className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
-                </button>
-              </div>
-            </div>
+                <div className="acoes-card">
+                  <button
+                    onClick={() => navigate(`/editar-prato/${prato.id}`)}
+                    className="btn-icon"
+                  >
+                    <img src={iconEditar} alt="Editar" />
+                  </button>
 
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
-              <div className="acoes-card">
-                <button className="btn-icon">
-                  <img src={iconEditar} alt="Editar" />
-                </button>
-                <button className="btn-icon deletar">
-                  <img src={iconDeletar} alt="Deletar" />
-                </button>
+                  <button
+                    className="btn-icon deletar"
+                    onClick={() => deletarPrato(prato.id)}
+                  >
+                    <img src={iconDeletar} alt="Deletar" />
+                  </button>
+                </div>
               </div>
-            </div>
+            ))}
+
           </div>
         </section>
       </main>
+
       {/* FOOTER */}
       <footer>
         <p>Projeto DAC <br/>

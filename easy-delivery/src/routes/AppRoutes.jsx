@@ -22,7 +22,7 @@ export default function AppRoutes() {
         <Route path="/admin" element={<HomeAdmin />} />
         <Route path="/categorias" element={<Categoria />} />
         <Route path="/pratos" element={<Prato />} />
-        <Route path="/editar-pratos" element={<EditarPrato />} />
+        <Route path="/editar-prato/:id" element={<EditarPrato />} />
         <Route path="/user" element={<HomeUser />} />
         <Route path="/listar-categoria" element={<ListarCategoria />} />
         <Route path="/editar-categoria/:id" element={<EditarCategoria />} />

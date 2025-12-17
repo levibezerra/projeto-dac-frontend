@@ -3,7 +3,9 @@ import imgPrato from "../../images/img/img-prato.svg";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../../components/InputField";
 import Button from "../../components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../../services/easyApi";
+import { toast } from "react-toastify";
 
 export default function Prato() {
 
@@ -18,23 +20,51 @@ export default function Prato() {
     categoriaId: ""
   });
 
+  const [categorias, setCategorias] = useState([]);
+
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  async function handleSubmit() {
+  async function carregarCategorias() {
     try {
-      const response = await api.post("/pratos", form);
+      const token = localStorage.getItem("token");
 
-      alert("Prato criado com sucesso!");
-      console.log(response.data);
+      const response = await api.get("/categorias", {
+        headers: { Authorization: token }
+      });
 
-      navigate("/admin");
+      setCategorias(response.data);
     } catch (error) {
-      console.log(error);
-      alert("Erro ao criar um prato!");
+      console.error(error);
+      toast.error("Erro ao carregar categorias");
     }
   }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await api.post("/pratos", form, {
+        headers: {
+          Authorization: token
+        }
+      });
+
+      toast.success("Prato criado com sucesso!");
+      navigate("/admin");
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao criar o prato");
+    }
+  }
+
+  useEffect(() => {
+    carregarCategorias();
+  }, []);
 
   return (
     <main>
@@ -51,14 +81,14 @@ export default function Prato() {
           </div>
 
           <div className="right-prato">
-            <div className="card-prato">
+            <form className="card-prato" onSubmit={handleSubmit}>
               <h1>PRATO</h1>
 
               <InputField
                 className="prato"
                 label="Nome"
                 type="text"
-                placeholder="Nome do prato"
+                placeholder="Nome do Prato"
                 name="nome"
                 value={form.nome}
                 onChange={handleChange}
@@ -68,7 +98,7 @@ export default function Prato() {
                 className="prato"
                 label="Descrição"
                 type="text"
-                placeholder="Descrição do prato"
+                placeholder="Descrição do Prato"
                 name="descricao"
                 value={form.descricao}
                 onChange={handleChange}
@@ -77,8 +107,9 @@ export default function Prato() {
               <InputField
                 className="prato"
                 label="Preço"
-                type="text"
-                placeholder="Preço do prato"
+                type="number"
+                step="0.01"
+                placeholder="Preço do Prato"
                 name="preco"
                 value={form.preco}
                 onChange={handleChange}
@@ -88,38 +119,51 @@ export default function Prato() {
                 className="prato"
                 label="Imagem do Prato"
                 type="text"
-                placeholder="Imagem do prato"
+                placeholder="URL da imagem"
                 name="imagemUrl"
                 value={form.imagemUrl}
                 onChange={handleChange}
               />
 
-              <InputField
-                className="prato"
-                label="Status do Prato"
-                type="text"
-                placeholder="Status do prato"
-                name="statusDoPrato"
-                value={form.statusDoPrato}
-                onChange={handleChange}
-              />
+              {/* STATUS */}
+              <div className="textfield prato">
+                <label>Status do Prato</label>
+                <select
+                  name="statusDoPrato"
+                  value={form.statusDoPrato}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Selecione</option>
+                  <option value="DISPONIVEL">DISPONÍVEL</option>
+                  <option value="INDISPONIVEL">INDISPONÍVEL</option>
+                </select>
+              </div>
 
-              <InputField
-                className="prato"
-                label="Categoria"
-                type="text"
-                placeholder="Categoria do prato"
-                name="categoriaId"
-                value={form.categoriaId}
-                onChange={handleChange}
-              />
+              {/* CATEGORIA */}
+              <div className="textfield prato">
+                <label>Categoria</label>
+                <select
+                  name="categoriaId"
+                  value={form.categoriaId}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Selecione</option>
+                  {categorias.map((categoria) => (
+                    <option key={categoria.id} value={categoria.id}>
+                      {categoria.nome}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-              <Button text="Adicionar" className="btn-prato" onClick={handleSubmit} />
+              <Button text="Adicionar" className="btn-prato" type="submit" />
 
               <p className="voltar-link">
                 <Link to="/admin">Voltar</Link>
               </p>
-            </div>
+            </form>
           </div>
         </div>
       </section>
