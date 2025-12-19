@@ -20,7 +20,8 @@ export default function Categoria() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.preventDefault();
 
     if (!form.nome || !form.descricao) {
       toast.warn("Preencha todos os campos!");
@@ -44,7 +45,7 @@ export default function Categoria() {
         },
         {
           headers: {
-            Authorization: token
+            Authorization: `Bearer ${token}`
           }
         }
       );
