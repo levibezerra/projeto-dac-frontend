@@ -22,6 +22,7 @@ export default function EditarPrato() {
   });
 
   const [categorias, setCategorias] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -30,11 +31,15 @@ export default function EditarPrato() {
   async function carregarCategorias() {
     try {
       const token = localStorage.getItem("token");
+
       const response = await api.get("/categorias", {
-        headers: { Authorization: token }
+        headers: { Authorization: `Bearer ${token}` }
       });
+
       setCategorias(response.data);
+
     } catch (error) {
+      console.error(error);
       toast.error("Erro ao carregar categorias");
     }
   }
@@ -42,8 +47,9 @@ export default function EditarPrato() {
   async function carregarPrato() {
     try {
       const token = localStorage.getItem("token");
+
       const response = await api.get(`/pratos/${id}`, {
-        headers: { Authorization: token }
+        headers: { Authorization: `Bearer ${token}` }
       });
 
       setForm({
@@ -56,29 +62,30 @@ export default function EditarPrato() {
       });
 
     } catch (error) {
+      console.error(error);
       toast.error("Erro ao carregar prato");
       navigate("/admin");
     }
   }
 
   async function handleSubmit(e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    await api.patch(`/pratos/${id}`, form, {
-      headers: { Authorization: token }
-    });
+      await api.patch(`/pratos/${id}`, form, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
-    toast.success("Prato atualizado com sucesso!");
-    navigate("/admin");
+      toast.success("Prato atualizado com sucesso!");
+      navigate("/admin");
 
-  } catch (error) {
-    console.error(error);
-    toast.error("Erro ao atualizar o prato");
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao atualizar o prato");
+    }
   }
-}
 
   useEffect(() => {
     carregarCategorias();
@@ -169,9 +176,9 @@ export default function EditarPrato() {
                   required
                 >
                   <option value="">Selecione</option>
-                  {categorias.map(c => (
-                    <option key={c.id} value={c.id}>
-                      {c.nome}
+                  {categorias.map(categoria => (
+                    <option key={categoria.id} value={categoria.id}>
+                      {categoria.nome}
                     </option>
                   ))}
                 </select>

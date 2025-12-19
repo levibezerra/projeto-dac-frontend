@@ -1,15 +1,15 @@
 import "./pedidoUser.css";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import logo from "../../images/img/logo.png";
 import selecionar from "../../images/icons/selecionar.png"
+import api from "../../services/easyApi";
+import { toast } from "react-toastify";
 
 export default function PedidoUser() {
 
   const navigate = useNavigate();
-
-  function handleLogout() {
-    navigate("/pedidoUser");
-  }
+  const [pedidos, setPedidos] = useState([]);
 
   function goToTop() {
   window.scrollTo({
@@ -17,6 +17,80 @@ export default function PedidoUser() {
     behavior: "smooth"
   });
 }
+
+async function carregarPedidos() {
+    try {
+      const token = localStorage.getItem("token")?.trim();
+      const clienteId = Number(localStorage.getItem("clienteId"));
+
+      if (!token || !clienteId) {
+        toast.error("Sessão expirada. Faça login novamente.");
+        navigate("/");
+        return;
+      }
+
+      const authHeader = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+
+      const pedidosRes = await api.get("/pedidos/meusPedidos", authHeader);
+      const pedidosCliente = pedidosRes.data;
+
+      if (pedidosCliente.length === 0) {
+        setPedidos([]);
+        return;
+      }
+
+      const itensRes = await api.get("/itemPedidos", authHeader);
+
+      const pratosRes = await api.get("/pratos", authHeader);
+
+      const pratosMap = new Map(
+        pratosRes.data.map(prato => [prato.id, prato])
+      );
+
+      const pedidosFormatados = [];
+
+      pedidosCliente.forEach(pedido => {
+        const itensDoPedido = itensRes.data.filter(
+          item => item.pedidoId === pedido.id
+        );
+
+        itensDoPedido.forEach(item => {
+          const prato = pratosMap.get(item.pratoId);
+
+          pedidosFormatados.push({
+            id: item.id,
+            pedidoId: pedido.id,
+            pratoNome: prato?.nome,
+            descricao: prato?.descricao,
+            imagemUrl: prato?.imagemUrl,
+            categoria: prato?.categoriaNome,
+            endereco: pedido.enderecoEntrega,
+            status: pedido.statusPedido,
+            quantidade: item.quantidade,
+            total: item.subTotal
+          });
+        });
+      });
+
+      setPedidos(pedidosFormatados);
+
+    } catch (error) {
+      console.error(error);
+
+      if (error.response?.status === 401) {
+        toast.error("Acesso não autorizado.");
+        navigate("/");
+      } else {
+        toast.error("Erro ao carregar pedidos");
+      }
+    }
+  }
+
+  useEffect(() => {
+    carregarPedidos();
+  }, []);
 
   return (
     <div className="container-pedido-user">
@@ -50,61 +124,47 @@ export default function PedidoUser() {
           <p>Faça seu melhor pedido aqui!</p>
         </div>
 
-        {/* PRATOS */}
+        {/* PEDIDOS */}
         <section className="container-pratos">
           <h1>Meus Pedidos</h1>
 
           <div className="lista-pratos">
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>ENDEREÇO: </b>Rua Teste - 10</p>
-              <p><b>STATUS: </b>EM PREPARAÇÃO</p>
-              <p><b>QUANTIDADE: </b>2</p>
-              <p><b>TOTAL: </b>51.80</p>
-              <div className="acoes-card">
-                <button onClick={() => navigate("/pagamento")} className="btn-icon">
-                  <img src={selecionar} alt="Realizar pagamento" />
-                </button>
-              </div>
-            </div>
 
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>ENDEREÇO: </b>Rua Teste - 10</p>
-              <p><b>STATUS: </b>EM PREPARAÇÃO</p>
-              <p><b>QUANTIDADE: </b>2</p>
-              <p><b>TOTAL: </b>51.80</p>
-              <div className="acoes-card">
-                <button onClick={() => navigate("/pagamento")} className="btn-icon">
-                  <img src={selecionar} alt="Realizar pagamento" />
-                </button>
-              </div>
-            </div>
+            {pedidos.length === 0 && (
+              <p>Você ainda não realizou nenhum pedido.</p>
+            )}
 
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>ENDEREÇO: </b>Rua Teste - 10</p>
-              <p><b>STATUS: </b>EM PREPARAÇÃO</p>
-              <p><b>QUANTIDADE: </b>2</p>
-              <p><b>TOTAL: </b>51.80</p>
-              <div className="acoes-card">
-                <button onClick={() => navigate("/pagamento")} className="btn-icon">
-                  <img src={selecionar} alt="Realizar pagamento" />
-                </button>
+            {pedidos.map(pedido => (
+              <div className="card" key={pedido.id}>
+                <img
+                  src={pedido.imagemUrl}
+                  alt={pedido.pratoNome}
+                />
+
+                <h2>{pedido.pratoNome}</h2>
+                <p><b>DESCRIÇÃO:</b> {pedido.descricao}</p>
+                <p><b>CATEGORIA:</b> {pedido.categoria}</p>
+                <p><b>ENDEREÇO:</b> {pedido.endereco}</p>
+                <p><b>STATUS:</b> {pedido.status}</p>
+                <p><b>QUANTIDADE:</b> {pedido.quantidade}</p>
+                <p><b>TOTAL:</b> R$ {pedido.total.toFixed(2)}</p>
+
+                {pedido.status === "PENDENTE" && (
+                  <div className="acoes-card">
+                    <button
+                      onClick={() => navigate(`/pagamento/${pedido.id}`)}
+                      className="btn-icon"
+                    >
+                      <img src={selecionar} alt="Realizar pagamento" />
+                    </button>
+                  </div>
+                )}
               </div>
-            </div>
-    
+            ))}
+
           </div>
         </section>
+
       </main>
       {/* FOOTER */}
       <footer>

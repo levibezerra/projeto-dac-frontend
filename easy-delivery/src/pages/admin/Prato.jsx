@@ -26,15 +26,30 @@ export default function Prato() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
+  function getAuthHeader() {
+    const token = localStorage.getItem("token")?.trim();
+
+    if (!token) {
+      toast.error("Sessão expirada. Faça login novamente.");
+      navigate("/");
+      return null;
+    }
+
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+  }
+
   async function carregarCategorias() {
     try {
-      const token = localStorage.getItem("token");
+      const authHeader = getAuthHeader();
+      if (!authHeader) return;
 
-      const response = await api.get("/categorias", {
-        headers: { Authorization: token }
-      });
-
+      const response = await api.get("/categorias", authHeader);
       setCategorias(response.data);
+
     } catch (error) {
       console.error(error);
       toast.error("Erro ao carregar categorias");
@@ -45,13 +60,14 @@ export default function Prato() {
     e.preventDefault();
 
     try {
-      const token = localStorage.getItem("token");
+      const authHeader = getAuthHeader();
+      if (!authHeader) return;
 
-      await api.post("/pratos", form, {
-        headers: {
-          Authorization: token
-        }
-      });
+      await api.post("/pratos", {
+        ...form,
+        preco: Number(form.preco),
+        categoriaId: Number(form.categoriaId)
+      }, authHeader);
 
       toast.success("Prato criado com sucesso!");
       navigate("/admin");

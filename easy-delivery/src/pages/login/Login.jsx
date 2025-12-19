@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import api from "../../services/easyApi";
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
 
@@ -30,16 +31,19 @@ export default function Login() {
         senha: form.senha
       });
 
-      const { token, role } = response.data;
+      const { token } = response.data;
+
+      const decoded = jwtDecode(token);
 
       localStorage.setItem("token", token);
-      localStorage.setItem("role", role);
+      localStorage.setItem("role", decoded.role);
+      localStorage.setItem("email", decoded.sub);
 
       toast.success("Login realizado com sucesso!");
 
-      if (role === "ROLE_ADMIN") {
+      if (decoded.role === "ADMIN") {
         navigate("/admin");
-      } else if (role === "ROLE_CLIENTE") {
+      } else if (decoded.role === "CLIENTE") {
         navigate("/user");
       } else {
         toast.error("Perfil de usuário não reconhecido");

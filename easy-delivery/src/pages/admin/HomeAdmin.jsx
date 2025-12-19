@@ -24,13 +24,20 @@ export default function HomeAdmin() {
     try {
       const token = localStorage.getItem("token");
 
+      if (!token) {
+        toast.error("Sessão expirada. Faça login novamente.");
+        navigate("/");
+        return;
+      }
+
       const response = await api.get("/pratos", {
         headers: {
-          Authorization: token
+          Authorization: `Bearer ${token}`
         }
       });
 
       setPratos(response.data);
+
     } catch (error) {
       console.error(error);
       toast.error("Erro ao carregar pratos");
@@ -42,7 +49,9 @@ export default function HomeAdmin() {
       const token = localStorage.getItem("token");
 
       await api.delete(`/pratos/${id}`, {
-        headers: { Authorization: token }
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
       toast.success("Prato excluído com sucesso!");

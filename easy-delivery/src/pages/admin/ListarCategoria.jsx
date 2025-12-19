@@ -17,17 +17,30 @@ export default function ListarCategoria() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  function getAuthHeader() {
+    const token = localStorage.getItem("token")?.trim();
+
+    if (!token) {
+      toast.error("Sessão expirada. Faça login novamente.");
+      navigate("/");
+      return null;
+    }
+
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+  }
+
   async function carregarCategorias() {
     try {
-      const token = localStorage.getItem("token");
+      const authHeader = getAuthHeader();
+      if (!authHeader) return;
 
-      const response = await api.get("/categorias", {
-        headers: {
-          Authorization: token
-        }
-      });
-
+      const response = await api.get("/categorias", authHeader);
       setCategorias(response.data);
+
     } catch (error) {
       console.error(error);
       toast.error("Erro ao carregar categorias");
@@ -42,18 +55,15 @@ export default function ListarCategoria() {
     if (!confirmacao) return;
 
     try {
-      const token = localStorage.getItem("token");
+      const authHeader = getAuthHeader();
+      if (!authHeader) return;
 
-      await api.delete(`/categorias/${id}`, {
-        headers: {
-          Authorization: token
-        }
-      });
+      await api.delete(`/categorias/${id}`, authHeader);
 
       toast.success("Categoria excluída com sucesso!");
 
-      setCategorias((prev) =>
-        prev.filter((categoria) => categoria.id !== id)
+      setCategorias(prev =>
+        prev.filter(categoria => categoria.id !== id)
       );
 
     } catch (error) {

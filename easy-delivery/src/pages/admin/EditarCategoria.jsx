@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 export default function EditarCategoria() {
 
   const navigate = useNavigate();
-
   const { id } = useParams();
 
   const [form, setForm] = useState({
@@ -18,18 +17,33 @@ export default function EditarCategoria() {
     descricao: ""
   });
 
+  function getAuthHeader() {
+    const token = localStorage.getItem("token")?.trim();
+
+    if (!token) {
+      toast.error("Sessão expirada. Faça login novamente.");
+      navigate("/");
+      return null;
+    }
+
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+  }
+
   useEffect(() => {
     async function buscarCategoria() {
       try {
-        const response = await api.get(`/categorias/${id}`, {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        });
+        const authHeader = getAuthHeader();
+        if (!authHeader) return;
+
+        const response = await api.get(`/categorias/${id}`, authHeader);
 
         setForm({
           nome: response.data.nome,
-          descricao: response.data.descricao,
+          descricao: response.data.descricao
         });
 
       } catch (error) {
@@ -53,11 +67,10 @@ export default function EditarCategoria() {
     }
 
     try {
-      await api.patch(`/categorias/${id}`, form, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      });
+      const authHeader = getAuthHeader();
+      if (!authHeader) return;
+
+      await api.patch(`/categorias/${id}`, form, authHeader);
 
       toast.success("Categoria atualizada com sucesso!");
       navigate("/listar-categoria");

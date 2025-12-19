@@ -1,15 +1,15 @@
 import "./user.css";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import logo from "../../images/img/logo.png";
 import selecionar from "../../images/icons/selecionar.png"
+import api from "../../services/easyApi";
+import { toast } from "react-toastify";
 
 export default function HomeUser() {
 
   const navigate = useNavigate();
-
-  function handleLogout() {
-    navigate("/user");
-  }
+  const [pratos, setPratos] = useState([]);
 
   function goToTop() {
   window.scrollTo({
@@ -17,6 +17,38 @@ export default function HomeUser() {
     behavior: "smooth"
   });
 }
+
+async function carregarPratos() {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Sessão expirada. Faça login novamente.");
+        navigate("/");
+        return;
+      }
+
+      const response = await api.get("/pratos", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const pratosDisponiveis = response.data.filter(
+        prato => prato.statusDoPrato === "DISPONIVEL"
+      );
+
+      setPratos(pratosDisponiveis);
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao carregar cardápio");
+    }
+  }
+
+  useEffect(() => {
+    carregarPratos();
+  }, []);
 
   return (
     <div className="container-user">
@@ -60,48 +92,38 @@ export default function HomeUser() {
           <h1>Cardápio</h1>
 
           <div className="lista-pratos">
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
-              <div className="acoes-card">
-                <button onClick={() => navigate("/pedido")} className="btn-icon">
-                  <img src={selecionar} alt="Selecionar prato para compra" />
-                </button>
-              </div>
-            </div>
 
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
-              <div className="acoes-card">
-                <button onClick={() => navigate("/pedido")} className="btn-icon">
-                  <img src={selecionar} alt="Selecionar prato para compra" />
-                </button>
-              </div>
-            </div>
+            {pratos.length === 0 && (
+              <p>Nenhum prato disponível no momento.</p>
+            )}
 
-            <div className="card">
-              <img src="https://speedy.uenicdn.com/99def3c9-86a1-4c19-9317-d5376c18c298/c512_a/image/upload/v1582164126/business/99def3c9-86a1-4c19-9317-d5376c18c298/hamburguer-shutterstockjpg.jpg" alt="Nome do prato"/>
-              <h2>Hambúrguer Clássico</h2>
-              <p><b>DESCRIÇÃO: </b>Hambúrguer artesanal com queijo</p>
-              <p><b>CATEGORIA: </b>Lanches</p>
-              <p><b>STATUS: </b>DISPONÍVEL</p>
-              <p><b>PREÇO: </b>25.90</p>
-              <div className="acoes-card">
-                <button onClick={() => navigate("/pedido")} className="btn-icon">
-                  <img src={selecionar} alt="Selecionar prato para compra" />
-                </button>
+            {pratos.map((prato) => (
+              <div className="card" key={prato.id}>
+                <img
+                  src={prato.imagemUrl}
+                  alt={prato.nome}
+                />
+
+                <h2>{prato.nome}</h2>
+                <p><b>DESCRIÇÃO:</b> {prato.descricao}</p>
+                <p><b>CATEGORIA:</b> {prato.categoriaNome}</p>
+                <p><b>STATUS:</b> {prato.statusDoPrato}</p>
+                <p><b>PREÇO:</b> R$ {Number(prato.preco).toFixed(2)}</p>
+
+                <div className="acoes-card">
+                  <button
+                    onClick={() => navigate(`/pedido/${prato.id}`)}
+                    className="btn-icon"
+                  >
+                    <img
+                      src={selecionar}
+                      alt="Selecionar prato para compra"
+                    />
+                  </button>
+                </div>
               </div>
-            </div>
-            
+            ))}
+
           </div>
         </section>
       </main>
